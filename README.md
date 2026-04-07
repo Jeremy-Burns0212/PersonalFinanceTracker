@@ -34,3 +34,7 @@ If you have ideas for new features or suggestions to make the app faster and mor
 - A short description of your request or recommendation
 - Steps/examples (if applicable)
 - drawings, diagrams, or examples (in either image or text format)
+
+## Creator(s)
+Name: Jeremy Burns
+GitHub Username: (Jeremy-Burns0212)
