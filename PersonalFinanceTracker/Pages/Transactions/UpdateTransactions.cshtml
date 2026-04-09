@@ -1,0 +1,55 @@
+@page "{id:int}"
+@model PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel
+
+@{
+    ViewData["Title"] = "Edit Transaction";
+}
+
+<h1>Edit Transaction</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Transaction.Id" />
+
+            <div class="mb-3">
+                <label asp-for="Transaction.Amount" class="form-label"></label>
+                <input asp-for="Transaction.Amount" class="form-control" />
+                <span asp-validation-for="Transaction.Amount" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Transaction.Date" class="form-label"></label>
+                <input asp-for="Transaction.Date" class="form-control" />
+                <span asp-validation-for="Transaction.Date" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Transaction.Description" class="form-label"></label>
+                <input asp-for="Transaction.Description" class="form-control" />
+                <span asp-validation-for="Transaction.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Transaction.Type" class="form-label"></label>
+                <select asp-for="Transaction.Type" class="form-select" asp-items="Html.GetEnumSelectList<TransactionType>()"></select>
+                <span asp-validation-for="Transaction.Type" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Transaction.CategoryId" class="form-label">Category</label>
+                <select asp-for="Transaction.CategoryId" class="form-select" asp-items="Model.CategoryOptions"></select>
+                <span asp-validation-for="Transaction.CategoryId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-page="Index" class="btn btn-secondary">Back to list</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

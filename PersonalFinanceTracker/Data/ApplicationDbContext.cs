@@ -12,5 +12,6 @@ namespace PersonalFinanceTracker.Data
 
 		public DbSet<Transaction> Transactions => Set<Transaction>();
 		public DbSet<Category> Categories => Set<Category>();
+		public DbSet<AppUser> Users => Set<AppUser>();
 	}
 }

@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
 	?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
@@ -34,5 +35,6 @@ app.MapControllerRoute(
 	pattern: "{controller=Home}/{action=Index}/{id?}")
 	.WithStaticAssets();
 
+app.MapRazorPages().WithStaticAssets();
 
 app.Run();
