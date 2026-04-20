@@ -1,24 +1,46 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Users
 {
+	/// <summary>
+	/// Page model for creating a new application user using ASP.NET Core Identity.
+	/// Uses UserManager to create the user (no hardcoded credentials).
+	/// </summary>
 	public class CreateUserModel : PageModel
 	{
-		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public CreateUserModel(ApplicationDbContext context)
+		public CreateUserModel(UserManager<AppUser> userManager)
 		{
-			_context = context;
+			_userManager = userManager;
 		}
 
 		[BindProperty]
-		public AppUser User { get; set; } = new();
+		public CreateUserInput Input { get; set; } = new();
 
 		public void OnGet()
 		{
+		}
+
+		public class CreateUserInput
+		{
+			[Required]
+			[StringLength(100)]
+			public string FullName { get; set; } = string.Empty;
+
+			[Required]
+			[EmailAddress]
+			[StringLength(150)]
+			public string Email { get; set; } = string.Empty;
+
+			[Required]
+			[StringLength(100, MinimumLength = 6)]
+			[DataType(DataType.Password)]
+			public string Password { get; set; } = string.Empty;
 		}
 
 		public async Task<IActionResult> OnPostAsync()
@@ -28,9 +50,25 @@ namespace PersonalFinanceTracker.Pages.Users
 				return Page();
 			}
 
-			_context.Users.Add(User);
-			await _context.SaveChangesAsync();
+			var user = new AppUser
+			{
+				UserName = Input.Email,
+				Email = Input.Email,
+				FullName = Input.FullName
+			};
 
+			// Create user with the supplied password. Identity hashes the password for you.
+			var result = await _userManager.CreateAsync(user, Input.Password);
+			if (!result.Succeeded)
+			{
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError(string.Empty, error.Description);
+				}
+				return Page();
+			}
+
+			// Optionally sign in the user or send confirmation email here
 			return RedirectToPage("./Index");
 		}
 	}

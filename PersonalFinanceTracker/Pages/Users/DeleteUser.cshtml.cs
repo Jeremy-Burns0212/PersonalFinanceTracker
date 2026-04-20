@@ -1,52 +1,78 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Users
 {
+	/// <summary>
+	/// Page model for deleting an application user via ASP.NET Core Identity.
+	/// Uses <see cref="UserManager{TUser}"/> to remove users.
+	/// </summary>
 	public class DeleteUserModel : PageModel
 	{
-		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public DeleteUserModel(ApplicationDbContext context)
+		/// <summary>
+		/// Initializes a new instance of <see cref="DeleteUserModel"/>.
+		/// </summary>
+		/// <param name="userManager">The Identity user manager.</param>
+		public DeleteUserModel(UserManager<AppUser> userManager)
 		{
-			_context = context;
+			_userManager = userManager;
 		}
 
+		/// <summary>
+		/// The user being deleted, bound to the page.
+		/// </summary>
 		[BindProperty]
-		public AppUser User { get; set; } = default!;
+		public new AppUser User { get; set; } = default!;
 
-		public async Task<IActionResult> OnGetAsync(int? id)
+		/// <summary>
+		/// Loads the user for confirmation before deleting.
+		/// </summary>
+		/// <param name="id">The string identifier of the user to delete.</param>
+		/// <returns>A <see cref="PageResult"/> if found; otherwise <see cref="NotFoundResult"/>.</returns>
+		public async Task<IActionResult> OnGetAsync(string? id)
 		{
 			if (id is null)
 			{
 				return NotFound();
 			}
 
-			var user = await _context.Users.FirstOrDefaultAsync(m => m.Id == id);
+			var user = await _userManager.FindByIdAsync(id);
 			if (user is null)
 			{
 				return NotFound();
 			}
 
-			User = user;
+			User = new AppUser
+			{
+				Id = user.Id,
+				UserName = user.UserName,
+				Email = user.Email,
+				FullName = user.FullName
+			};
+
 			return Page();
 		}
 
-		public async Task<IActionResult> OnPostAsync(int? id)
+		/// <summary>
+		/// Deletes the user from the Identity store.
+		/// </summary>
+		/// <param name="id">The string identifier of the user to delete.</param>
+		/// <returns>Redirects to index after deletion or NotFound if id is invalid.</returns>
+		public async Task<IActionResult> OnPostAsync(string? id)
 		{
 			if (id is null)
 			{
 				return NotFound();
 			}
 
-			var user = await _context.Users.FindAsync(id);
+			var user = await _userManager.FindByIdAsync(id);
 			if (user is not null)
 			{
-				_context.Users.Remove(user);
-				await _context.SaveChangesAsync();
+				await _userManager.DeleteAsync(user);
 			}
 
 			return RedirectToPage("./Index");

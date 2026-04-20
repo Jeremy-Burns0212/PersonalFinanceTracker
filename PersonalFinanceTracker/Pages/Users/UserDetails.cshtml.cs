@@ -1,36 +1,60 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Users
 {
+	/// <summary>
+	/// Page model for viewing details of a specific application user.
+	/// Uses <see cref="UserManager{TUser}"/> to retrieve the user from the Identity store.
+	/// </summary>
 	public class DetailsUserModel : PageModel
 	{
-		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public DetailsUserModel(ApplicationDbContext context)
+		/// <summary>
+		/// Initializes a new instance of <see cref="DetailsUserModel"/>.
+		/// </summary>
+		/// <param name="userManager">The Identity user manager.</param>
+		public DetailsUserModel(UserManager<AppUser> userManager)
 		{
-			_context = context;
+			_userManager = userManager;
 		}
 
-		public AppUser User { get; set; } = default!;
+		/// <summary>
+		/// The application user being displayed. Hides <see cref="PageModel.User"/> (ClaimsPrincipal).
+		/// </summary>
+		public new AppUser User { get; set; } = default!;
 
-		public async Task<IActionResult> OnGetAsync(int? id)
+		/// <summary>
+		/// Handles HTTP GET requests to display a user's details.
+		/// </summary>
+		/// <param name="id">The string identifier of the user to display.</param>
+		/// <returns>
+		/// A <see cref="PageResult"/> with the user details when found; otherwise a <see cref="NotFoundResult"/>.
+		/// </returns>
+		public async Task<IActionResult> OnGetAsync(string? id)
 		{
-			if (id is null)
+			if (string.IsNullOrEmpty(id))
 			{
 				return NotFound();
 			}
 
-			var user = await _context.Users.FirstOrDefaultAsync(m => m.Id == id);
-			if (user is null)
+			var existing = await _userManager.FindByIdAsync(id);
+			if (existing is null)
 			{
 				return NotFound();
 			}
 
-			User = user;
+			User = new AppUser
+			{
+				Id = existing.Id,
+				UserName = existing.UserName,
+				Email = existing.Email,
+				FullName = existing.FullName
+			};
+
 			return Page();
 		}
 	}

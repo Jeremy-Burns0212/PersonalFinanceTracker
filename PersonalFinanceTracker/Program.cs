@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
+using PersonalFinanceTracker.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection; // required for Identity extension methods
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlServer(connectionString));
+
+// Add Identity
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+	// Tune password / sign-in options as required.
+	options.SignIn.RequireConfirmedAccount = false;
+})
+	.AddEntityFrameworkStores<ApplicationDbContext>()
+	.AddDefaultTokenProviders();
 
 var app = builder.Build();
 
@@ -26,6 +39,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+// Important: authentication must come before authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
