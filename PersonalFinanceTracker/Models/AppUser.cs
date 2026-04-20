@@ -1,18 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace PersonalFinanceTracker.Models
 {
-	public class AppUser
+	/// <summary>
+	/// Represents an application user for Identity with application-specific properties.
+	/// Inherits from <see cref="IdentityUser"/> so Identity APIs work correctly.
+	/// </summary>
+	public class AppUser : IdentityUser
 	{
-		public int Id { get; set; }
-
+		/// <summary>
+		/// Gets or sets the full name of the user.
+		/// </summary>
 		[Required]
 		[StringLength(100)]
 		public string FullName { get; set; } = string.Empty;
-
-		[Required]
-		[EmailAddress]
-		[StringLength(150)]
-		public string Email { get; set; } = string.Empty;
 	}
 }
