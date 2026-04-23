@@ -37,4 +37,4 @@ If you have ideas for new features or suggestions to make the app faster and mor
 
 ## Creator(s)
 Name: Jeremy Burns
-GitHub Username: (Jeremy-Burns0212)
+GitHub Username: [Jeremy-Burns0212](https://github.com/Jeremy-Burns0212)
