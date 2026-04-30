@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PersonalFinanceTracker</title>
+    <title>@ViewData["Title"] - Personal Finance Tracker</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -18,8 +18,8 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-sm-inline-flex w-100">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -27,12 +27,41 @@
                             <a class="nav-link text-dark" asp-page="/Transactions/Index">Transactions</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-page="/Users/Index">Users</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+
+                    <div class="d-flex align-items-center w-100">
+                        <div class="flex-grow-1"></div>
+
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <span class="navbar-text me-3">Welcome, @User.Identity?.Name</span>
+
+                            <div class="d-flex">
+                                <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline" asp-antiforgery="true">
+                                    <button type="submit" class="btn btn-link nav-link text-dark p-0 me-2">Logout</button>
+                                </form>
+
+                                <form asp-area="Identity" asp-page="/Account/DeleteAccount" method="post" class="d-inline" asp-antiforgery="true" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+                                    <button type="submit" class="btn btn-link nav-link text-danger p-0">Delete Account</button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="navbar-text me-3">&nbsp;</span>
+
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                </li>
+                            </ul>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
@@ -45,7 +74,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - PersonalFinanceTracker - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - Personal Finance Tracker - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
