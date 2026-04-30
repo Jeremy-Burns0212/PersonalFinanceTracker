@@ -3,7 +3,6 @@ using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection; // required for Identity extension methods
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +16,20 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 	options.UseSqlServer(connectionString));
 
-// Add Identity
+// Add Identity with password rules: min 8 chars, digit, uppercase, lowercase, non-alphanumeric.
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
-	// Tune password / sign-in options as required.
+	// Sign-in options
 	options.SignIn.RequireConfirmedAccount = false;
+
+	// Password rules
+	options.Password.RequireDigit = true;
+	options.Password.RequireLowercase = true;
+	options.Password.RequireUppercase = true;
+	options.Password.RequireNonAlphanumeric = true;
+	options.Password.RequiredLength = 8;
+
+	// Ensure username uniqueness is enforced by Identity store/index (database migration).
 })
 	.AddEntityFrameworkStores<ApplicationDbContext>()
 	.AddDefaultTokenProviders();
