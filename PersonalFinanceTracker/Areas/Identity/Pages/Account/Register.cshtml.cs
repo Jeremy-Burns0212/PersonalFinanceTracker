@@ -1,158 +1,137 @@
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
 {
-    /// <summary>
-    /// Page model for user registration and login.
-    /// Handles both registration (OnPostAsync) and login (OnPostLoginAsync) functionality.
-    /// </summary>
     [AllowAnonymous]
-    public class RegisterModel : PageModel
+    public class RegisterModel(
+        UserManager<AppUser> userManager,
+        SignInManager<AppUser> signInManager,
+        RoleManager<IdentityRole> roleManager,
+        ILogger<RegisterModel> logger) : PageModel
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-
-        public RegisterModel(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
-
-        /// <summary>
-        /// Input model bound to the Register form.
-        /// </summary>
-        public class RegisterInputModel
-        {
-            [Required]
-            [StringLength(100)]
-            [Display(Name = "Full name")]
-            public string FullName { get; set; } = string.Empty;
-
-            [Required]
-            [Display(Name = "Username")]
-            public string UserName { get; set; } = string.Empty;
-
-            [EmailAddress]
-            [Display(Name = "Email")]
-            public string? Email { get; set; }
-
-            [Required]
-            [DataType(DataType.Password)]
-            [Display(Name = "Password")]
-            public string Password { get; set; } = string.Empty;
-
-            [Required]
-            [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation do not match.")]
-            public string ConfirmPassword { get; set; } = string.Empty;
-        }
-
-        /// <summary>
-        /// Input model for the login form.
-        /// </summary>
-        public class LoginInputModel
-        {
-            [Required]
-            [Display(Name = "Username")]
-            public string UserName { get; set; } = string.Empty;
-
-            [Required]
-            [DataType(DataType.Password)]
-            [Display(Name = "Password")]
-            public string Password { get; set; } = string.Empty;
-
-            [Display(Name = "Remember me?")]
-            public bool RememberMe { get; set; }
-        }
+        private readonly SignInManager<AppUser> _signInManager = signInManager;
+        private readonly UserManager<AppUser> _userManager = userManager;
+        private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+        private readonly ILogger<RegisterModel> _logger = logger;
 
         [BindProperty]
-        public RegisterInputModel Input { get; set; } = new RegisterInputModel();
+        public InputModel Input { get; set; } = null!;
 
-        [BindProperty]
-        public LoginInputModel LoginInput { get; set; } = new LoginInputModel();
-
-        // Preserve returnUrl if provided
-        [BindProperty(SupportsGet = true)]
         public string? ReturnUrl { get; set; }
 
-        /// <summary>
-        /// GET handler.
-        /// </summary>
-        public void OnGet()
+        public class InputModel
         {
-            // No-op: page simply renders the form.
+            [Required]
+            [EmailAddress]
+            [Display(Name = "Email")]
+            public string Email { get; set; } = null!;
+
+            [Required]
+            [DataType(DataType.Password)]
+            [Display(Name = "Password")]
+            public string Password { get; set; } = null!;
+
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm password")]
+            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            public string ConfirmPassword { get; set; } = null!;
+
+            [Required]
+            [Display(Name = "Full Name")]
+            [StringLength(100)]
+            public string FullName { get; set; } = null!;
         }
 
-        /// <summary>
-        /// Handles POST to register a new user. Creates an AppUser and signs them in on success.
-        /// </summary>
-        public async Task<IActionResult> OnPostAsync()
+        public void OnGet(string? returnUrl = null)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var user = new AppUser
-            {
-                UserName = Input.UserName,
-                Email = Input.Email ?? string.Empty,
-                FullName = Input.FullName
-            };
-
-            // Create the user with the configured password rules (see Program.cs).
-            var result = await _userManager.CreateAsync(user, Input.Password);
-            if (result.Succeeded)
-            {
-                // Sign in the user immediately after registration.
-                await _signInManager.SignInAsync(user, isPersistent: false);
-
-                if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
-                {
-                    return LocalRedirect(ReturnUrl);
-                }
-
-                return LocalRedirect("/");
-            }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return Page();
+            ReturnUrl = returnUrl;
         }
 
-        /// <summary>
-        /// Handles POST request to authenticate a user. Invoked when form uses handler name "Login".
-        /// </summary>
-        /// <returns>Redirects on success or redisplays the form on failure.</returns>
-        public async Task<IActionResult> OnPostLoginAsync()
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
+
+            // Log ModelState to diagnose binding issues
             if (!ModelState.IsValid)
             {
-                return Page();
+                _logger.LogWarning("ModelState is invalid. Errors: {errors}", 
+                    string.Join("; ", ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage))));
             }
 
-            var result = await _signInManager.PasswordSignInAsync(LoginInput.UserName, LoginInput.Password, LoginInput.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                try
                 {
-                    return LocalRedirect(ReturnUrl);
-                }
+                    AppUser user = new() 
+                    { 
+                        UserName = Input.Email, 
+                        Email = Input.Email, 
+                        EmailConfirmed = true,
+                        FullName = Input.FullName
+                    };
+                    IdentityResult result = await _userManager.CreateAsync(user, Input.Password);
+                    if (result.Succeeded)
+                    {
+#pragma warning disable CA2254 // Template should be a static expression
+#pragma warning disable CA1848 // Use the LoggerMessage delegates
+                        _logger.LogInformation("User created a new account with password.");
+#pragma warning restore CA1848 // Use the LoggerMessage delegates
+#pragma warning restore CA2254
 
-                return LocalRedirect("/");
+                        // Assign a default Identity role if desired (e.g., "User").
+                        const string defaultRole = "User";
+                        if (!await _roleManager.RoleExistsAsync(defaultRole))
+                        {
+                            IdentityResult roleCreateResult = await _roleManager.CreateAsync(new IdentityRole(defaultRole));
+                            if (!roleCreateResult.Succeeded)
+                            {
+                                _logger.LogError("Failed to create default role. Errors: {errors}", 
+                                    string.Join("; ", roleCreateResult.Errors.Select(e => e.Description)));
+                                foreach (IdentityError error in roleCreateResult.Errors)
+                                {
+                                    ModelState.AddModelError(string.Empty, error.Description);
+                                }
+                                return Page();
+                            }
+                        }
+                        IdentityResult roleResult = await _userManager.AddToRoleAsync(user, defaultRole);
+                        if (!roleResult.Succeeded)
+                        {
+                            _logger.LogError("Failed to add user to role. Errors: {errors}", 
+                                string.Join("; ", roleResult.Errors.Select(e => e.Description)));
+                            foreach (IdentityError error in roleResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                            return Page();
+                        }
+
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User signed in successfully. Redirecting to {returnUrl}", returnUrl);
+                        return LocalRedirect(returnUrl);
+                    }
+                    // Add UserManager.CreateAsync errors to ModelState
+                    _logger.LogError("Failed to create user. Errors: {errors}", 
+                        string.Join("; ", result.Errors.Select(e => e.Description)));
+                    foreach (IdentityError error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "An error occurred during registration");
+                    ModelState.AddModelError(string.Empty, "An error occurred during registration. Please try again.");
+                }
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            // If we got this far, something failed, redisplay form
             return Page();
         }
     }
