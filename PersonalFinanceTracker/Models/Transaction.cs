@@ -11,8 +11,8 @@ namespace PersonalFinanceTracker.Models
 		public decimal? Amount { get; set; }
 
 		[Required]
-		[DataType(DataType.Date)]
-		public DateTime Date { get; set; } = DateTime.UtcNow.Date;
+        [DataType(DataType.Date)]
+		public required DateOnly Date { get; set; }
 
 		[Required]
 		[StringLength(200)]
