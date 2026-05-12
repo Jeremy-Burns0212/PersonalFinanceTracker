@@ -17,7 +17,7 @@ namespace PersonalFinanceTracker.Pages.Transactions
 		}
 
 		[BindProperty]
-		public Transaction Transaction { get; set; } = new();
+       public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
 
 		public SelectList CategoryOptions { get; set; } = default!;
 
