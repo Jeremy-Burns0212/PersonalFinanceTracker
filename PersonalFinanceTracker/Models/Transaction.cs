@@ -8,7 +8,7 @@ namespace PersonalFinanceTracker.Models
 
 		[Required]
 		[Range(0.01, double.MaxValue)]
-		public decimal Amount { get; set; }
+		public decimal? Amount { get; set; }
 
 		[Required]
 		[DataType(DataType.Date)]

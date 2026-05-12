@@ -30,7 +30,7 @@
             <td>@item.Description</td>
             <td>@item.Type</td>
             <td>@(item.Category?.Name ?? "-")</td>
-            <td>@item.Amount.ToString("C")</td>
+            <td>@(item.Amount?.ToString("C") ?? "-")</td>
             <td>
                 <a asp-page="UpdateTransactions" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Edit</a> |
                 <a asp-page="DetailsTransactions" class="btn btn-sm btn-secondary" asp-route-id="@item.Id">Details</a> |
