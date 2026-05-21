@@ -8,6 +8,8 @@
             "args": [
                 "build",
                 "${workspaceFolder}/PersonalFinanceTracker/PersonalFinanceTracker.csproj",
+                "/property:UseAppHost=false",
+                "/property:BaseOutputPath=${workspaceFolder}/PersonalFinanceTracker/bin/build-check/",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -17,11 +19,14 @@
             "label": "watch",
             "command": "C:\\Program Files\\dotnet\\dotnet.exe",
             "type": "process",
+            "options": {
+                "cwd": "${workspaceFolder}/PersonalFinanceTracker"
+            },
             "args": [
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/PersonalFinanceTracker/PersonalFinanceTracker.csproj"
+                "PersonalFinanceTracker.csproj"
             ],
             "problemMatcher": "$msCompile",
             "isBackground": true,
