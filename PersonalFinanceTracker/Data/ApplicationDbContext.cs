@@ -30,5 +30,15 @@ namespace PersonalFinanceTracker.Data
 		public DbSet<Category> Categories => Set<Category>();
 
 		// Note: IdentityDbContext already exposes Users, Roles, etc. Do not redeclare Users here.
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			// Ensure the Amount column has sufficient precision to avoid truncation warnings.
+			modelBuilder.Entity<Transaction>()
+				.Property(t => t.Amount)
+				.HasPrecision(18, 2);
+		}
 	}
 }

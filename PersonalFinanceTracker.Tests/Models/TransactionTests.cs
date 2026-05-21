@@ -23,7 +23,7 @@ namespace PersonalFinanceTracker.Tests.Models
             var t = new Transaction
             {
                 Amount = 10.50m,
-                Date = DateTime.UtcNow.Date,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 Description = "Test",
                 Type = TransactionType.Income,
                 CategoryId = 1
@@ -39,7 +39,7 @@ namespace PersonalFinanceTracker.Tests.Models
             var t = new Transaction
             {
                 Amount = -5m,
-                Date = DateTime.UtcNow.Date,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 Description = "Test",
                 Type = TransactionType.Expense,
                 CategoryId = 1
@@ -55,7 +55,7 @@ namespace PersonalFinanceTracker.Tests.Models
             var t = new Transaction
             {
                 Amount = 5m,
-                Date = DateTime.UtcNow.Date,
+                Date = DateOnly.FromDateTime(DateTime.UtcNow),
                 Description = string.Empty,
                 Type = TransactionType.Income,
                 CategoryId = 1

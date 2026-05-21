@@ -1,0 +1,24 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "PersonalFinanceTracker",
+    "AppUser",
+    "DateOnly",
+    "ApplicationDbContext",
+    "AppUserTests",
+    "Transactions",
+    "Transcripts",
+    "DbContext",
+    "EFCore",
+    "ASPNETCORE",
+    "RazorPages",
+    "HasPrecision",
+    "TransactionType",
+    "CreateTransactions",
+    "UpdateTransactions",
+    "CategoryId",
+    "Index.cshtml",
+    "_Layout.cshtml"
+  ]
+}
