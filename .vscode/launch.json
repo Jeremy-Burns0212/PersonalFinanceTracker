@@ -5,17 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch PersonalFinanceTracker in Edge",
+            "name": "Watch PersonalFinanceTracker in Edge",
             "type": "coreclr",
             "request": "launch",
-            "program": "${workspaceFolder}/PersonalFinanceTracker/bin/Debug/net10.0/PersonalFinanceTracker.dll",
-            "args": [],
+            "program": "C:\\Program Files\\dotnet\\dotnet.exe",
+            "args": [
+                "watch",
+                "run",
+                "--no-launch-profile",
+                "--project",
+                "PersonalFinanceTracker.csproj",
+                "--",
+                "--urls",
+                "http://127.0.0.1:5235"
+            ],
             "cwd": "${workspaceFolder}/PersonalFinanceTracker",
             "console": "internalConsole",
             "stopAtEntry": false,
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:5234"
+                "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "serverReadyAction": {
                 "action": "debugWithEdge",

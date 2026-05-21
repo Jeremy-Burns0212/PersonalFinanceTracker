@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 public partial class Program
 {
@@ -18,7 +19,9 @@ public partial class Program
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString, sqlServerOptions =>
+                sqlServerOptions.EnableRetryOnFailure())
+                .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
         // Add Identity with password rules: min 8 chars, digit, uppercase, lowercase, non-alphanumeric.
         builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
@@ -63,6 +66,13 @@ public partial class Program
             .WithStaticAssets();
 
         app.MapRazorPages().WithStaticAssets();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            // Apply pending migrations on startup so the LocalDB database exists before the app queries it.
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            dbContext.Database.Migrate();
+        }
 
         app.Run();
     }
