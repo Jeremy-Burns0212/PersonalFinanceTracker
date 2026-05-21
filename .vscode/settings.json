@@ -2,4 +2,13 @@
   "cSpell.enabled": true,
   "cSpell.configFile": "${workspaceFolder}/cspell.json",
   "cSpell.autoAddWords": false
+    "cSpell.words": [
+        "antiforgery",
+        "HSTS",
+        "jquery",
+        "nbsp",
+        "nowrap",
+        "onsubmit",
+        "toggleable"
+    ]
 }
