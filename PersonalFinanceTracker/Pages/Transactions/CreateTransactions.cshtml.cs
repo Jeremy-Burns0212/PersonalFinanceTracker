@@ -17,7 +17,7 @@ namespace PersonalFinanceTracker.Pages.Transactions
 		}
 
 		[BindProperty]
-		public Transaction Transaction { get; set; } = new();
+		public Transaction Transaction { get; set; } = default!;
 
 		public SelectList CategoryOptions { get; set; } = default!;
 

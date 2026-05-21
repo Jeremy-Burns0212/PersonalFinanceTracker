@@ -1,0 +1,5 @@
+{
+  "cSpell.enabled": true,
+  "cSpell.configFile": "${workspaceFolder}/cspell.json",
+  "cSpell.autoAddWords": false
+}

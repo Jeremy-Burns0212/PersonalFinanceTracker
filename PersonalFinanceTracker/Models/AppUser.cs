@@ -15,5 +15,10 @@ namespace PersonalFinanceTracker.Models
 		[Required]
 		[StringLength(100)]
 		public string FullName { get; set; } = string.Empty;
+
+		// Make Email required and validated as an email address for application-level validation.
+		[Required]
+		[EmailAddress]
+		public new string? Email { get; set; }
 	}
 }
