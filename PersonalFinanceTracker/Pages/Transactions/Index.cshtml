@@ -7,10 +7,19 @@
 
 <h1>Transactions</h1>
 
-<p class="d-flex gap-2 flex-wrap">
-    <a asp-page="CreateTransactions" class="btn btn-primary">Add Transaction</a>
-    <button type="button" class="btn btn-primary">Create Transcript</button>
-</p>
+<form method="post" asp-page-handler="Archive" class="row row-cols-1 row-cols-md-auto g-2 align-items-end mb-4">
+    <div class="col">
+        <label asp-for="TranscriptName" class="form-label">Transcript Name</label>
+        <input asp-for="TranscriptName" class="form-control" placeholder="Taxes, Bills, February etc." />
+        <span asp-validation-for="TranscriptName" class="text-danger"></span>
+    </div>
+    <div class="col d-flex gap-2 flex-wrap">
+        <a asp-page="CreateTransactions" class="btn btn-primary">Add Transaction</a>
+        <button type="submit" class="btn btn-success">Save as Transcript</button>
+    </div>
+</form>
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
 <table class="table table-striped">
     <thead>
