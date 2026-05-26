@@ -1,0 +1,32 @@
+@page "{id:int}"
+@model PersonalFinanceTracker.Pages.Transcripts.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Transcript";
+}
+
+<h1>Delete Transcript</h1>
+
+<h3>Are you sure you want to delete this transcript?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Name</dt>
+        <dd class="col-sm-9">@Model.Transcript.Name</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@(Model.Transcript.Description ?? "-")</dd>
+
+        <dt class="col-sm-3">Saved</dt>
+        <dd class="col-sm-9">@Model.Transcript.DateCreated.ToLocalTime().ToString("g")</dd>
+
+        <dt class="col-sm-3">Archived Transactions</dt>
+        <dd class="col-sm-9">@Model.Transcript.Transactions.Count</dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Transcript.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-page="Index" class="btn btn-secondary">Back to list</a>
+    </form>
+</div>

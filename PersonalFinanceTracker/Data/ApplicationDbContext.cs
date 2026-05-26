@@ -25,6 +25,16 @@ namespace PersonalFinanceTracker.Data
 		public DbSet<Transaction> Transactions => Set<Transaction>();
 
 		/// <summary>
+		/// Transcript archive headers table.
+		/// </summary>
+		public DbSet<Transcript> Transcripts => Set<Transcript>();
+
+		/// <summary>
+		/// Archived transaction rows for each transcript.
+		/// </summary>
+		public DbSet<TranscriptTransaction> TranscriptTransactions => Set<TranscriptTransaction>();
+
+		/// <summary>
 		/// Categories table.
 		/// </summary>
 		public DbSet<Category> Categories => Set<Category>();
@@ -37,6 +47,18 @@ namespace PersonalFinanceTracker.Data
 
 			// Ensure the Amount column has sufficient precision to avoid truncation warnings.
 			modelBuilder.Entity<Transaction>()
+				.Property(t => t.Amount)
+				.HasPrecision(18, 2);
+
+			modelBuilder.Entity<Transcript>()
+				.Property(t => t.DateCreated)
+				.HasColumnType("datetime2");
+
+			modelBuilder.Entity<Transcript>()
+				.Property(t => t.LastAccessed)
+				.HasColumnType("datetime2");
+
+			modelBuilder.Entity<TranscriptTransaction>()
 				.Property(t => t.Amount)
 				.HasPrecision(18, 2);
 		}
