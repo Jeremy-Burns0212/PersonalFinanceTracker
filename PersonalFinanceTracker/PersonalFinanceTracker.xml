@@ -1,0 +1,810 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PersonalFinanceTracker</name>
+    </assembly>
+    <members>
+        <member name="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.DeleteAccountModel">
+            <summary>
+            Page model to allow a signed-in user to delete their account.
+            Removes the Identity user and signs the user out.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.DeleteAccountModel.#ctor(Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser},Microsoft.AspNetCore.Identity.SignInManager{PersonalFinanceTracker.Models.AppUser},PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.DeleteAccountModel"/>.
+            </summary>
+            <param name="userManager">User manager for Identity operations.</param>
+            <param name="signInManager">Sign-in manager used to sign the user out after deletion.</param>
+            <param name="dbContext">Application DB context for optional cleanup of related data.</param>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.DeleteAccountModel.OnPostAsync">
+            <summary>
+            POST handler that deletes the current user's account and signs them out.
+            </summary>
+            <remarks>
+            Before deleting the Identity user, consider removing or archiving related application data
+            (for example, transactions or profile data). Perform that cleanup here if required.
+            Deleting the Identity user will remove the account from the authentication store.
+            </remarks>
+        </member>
+        <member name="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel">
+            <summary>
+            Page model for user login.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.#ctor(Microsoft.AspNetCore.Identity.SignInManager{PersonalFinanceTracker.Models.AppUser})">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel"/>.
+            </summary>
+            <param name="signInManager">Sign-in manager used for authenticating users.</param>
+        </member>
+        <member name="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.InputModel">
+            <summary>
+            Input model for the login form.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.InputModel.UserName">
+            <summary>
+            The user's login name or email used to identify the account.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.InputModel.Password">
+            <summary>
+            The account password supplied by the user.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.InputModel.RememberMe">
+            <summary>
+            Whether the authentication cookie should be persistent across browser sessions.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.Input">
+            <summary>
+            Bound input model for the login form.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.LoginModel.OnPostAsync(System.String)">
+            <summary>
+            Handles POST request to authenticate a user.
+            </summary>
+            <returns>Redirects on success or redisplays the form on failure.</returns>
+        </member>
+        <member name="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.LogoutModel">
+            <summary>
+            Page model that signs the current user out.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.LogoutModel.#ctor(Microsoft.AspNetCore.Identity.SignInManager{PersonalFinanceTracker.Models.AppUser})">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.LogoutModel"/>.
+            </summary>
+            <param name="signInManager">Sign-in manager used to sign the user out.</param>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.LogoutModel.OnPostAsync">
+            <summary>
+            POST handler that signs out the current user and redirects to the site root.
+            </summary>
+            <remarks>
+            Signs the current user out of the application and returns to the homepage.
+            Use this when you need an explicit server-side sign-out (e.g., logout button POST).
+            </remarks>
+        </member>
+        <member name="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel">
+            <summary>
+            Page model for registering a new user account.
+            Handles creating the user, assigning a default role, and signing the user in.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.#ctor(Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser},Microsoft.AspNetCore.Identity.SignInManager{PersonalFinanceTracker.Models.AppUser},Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole},Microsoft.Extensions.Logging.ILogger{PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel})">
+            <summary>
+            Page model for registering a new user account.
+            Handles creating the user, assigning a default role, and signing the user in.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.Input">
+            <summary>
+            Bound input model for the registration form.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.ReturnUrl">
+            <summary>
+            Return URL after registration completes.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.InputModel">
+            <summary>
+            Input model for the registration form.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.InputModel.Email">
+            <summary>
+            User's email address (also used as the username).
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.InputModel.Password">
+            <summary>
+            Password for the new account.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.InputModel.ConfirmPassword">
+            <summary>
+            Confirmation of the password entry.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.InputModel.FullName">
+            <summary>
+            Full name for display purposes.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.OnGet(System.String)">
+            <summary>
+            GET handler to initialize the registration page.
+            </summary>
+            <remarks>
+            Preserves the `returnUrl` so the UI can redirect after successful registration.
+            This is commonly used to return users to the page they were on before registering.
+            </remarks>
+        </member>
+        <member name="M:PersonalFinanceTracker.Areas.Identity.Pages.Account.RegisterModel.OnPostAsync(System.String)">
+            <summary>
+            POST handler that attempts to create the user, assign a default role, and sign the user in.
+            Any Identity errors are added to the page's <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary"/>.
+            </summary>
+            <remarks>
+            Creates an <see cref="T:PersonalFinanceTracker.Models.AppUser"/> using the application's
+            <see cref="T:Microsoft.AspNetCore.Identity.UserManager`1"/> and persists it to the Identity store.
+            Note: `EmailConfirmed` is set to true for developer convenience; consider requiring email confirmation in production.
+            After creation the user is added to a default role ("User"). If the role does not exist it will be created.
+            </remarks>
+        </member>
+        <member name="T:PersonalFinanceTracker.Controllers.HomeController">
+            <summary>
+            Basic site controller for general pages such as the home index and privacy page.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Controllers.HomeController.Index">
+            <summary>
+            Home page.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Controllers.HomeController.Privacy">
+            <summary>
+            Privacy information page.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Controllers.HomeController.Error">
+            <summary>
+            Error handler action that returns the error view populated with request information for diagnostics.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Data.ApplicationDbContext">
+            <summary>
+            Application database context configured for ASP.NET Core Identity and application entities.
+            Inherits from <see cref="T:Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityDbContext`1"/> so Identity stores are available.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Data.ApplicationDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{PersonalFinanceTracker.Data.ApplicationDbContext})">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Data.ApplicationDbContext"/>.
+            </summary>
+            <param name="options">The options used by a <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/>.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Data.ApplicationDbContext.Transactions">
+            <summary>
+            Transactions table.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Data.ApplicationDbContext.Transcripts">
+            <summary>
+            Transcript archive headers table.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Data.ApplicationDbContext.TranscriptTransactions">
+            <summary>
+            Archived transaction rows for each transcript.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Data.ApplicationDbContext.Categories">
+            <summary>
+            Categories table.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Data.ApplicationDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Configure EF Core model mappings and property precision/column types.
+            </summary>
+            <param name="modelBuilder">Model builder instance used to configure entity mappings.</param>
+        </member>
+        <member name="T:PersonalFinanceTracker.Migrations.AddIdentity">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddIdentity.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddIdentity.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddIdentity.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:PersonalFinanceTracker.Migrations.FixTransactionDateType">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.FixTransactionDateType.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.FixTransactionDateType.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.FixTransactionDateType.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:PersonalFinanceTracker.Migrations.AddTranscriptsArchive">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddTranscriptsArchive.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddTranscriptsArchive.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddTranscriptsArchive.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.AppUser">
+            <summary>
+            Represents an application user for Identity with application-specific properties.
+            Inherits from <see cref="T:Microsoft.AspNetCore.Identity.IdentityUser"/> so Identity APIs work correctly.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.AppUser.FullName">
+            <summary>
+            Gets or sets the full name of the user.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.AppUser.Email">
+            <summary>
+            The user's confirmed email address. This shadows the base property to enforce validation at the model level.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.Category">
+            <summary>
+            Represents a category used to group transactions (for example: Groceries, Salary, Utilities).
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Category.Id">
+            <summary>
+            Primary key.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Category.Name">
+            <summary>
+            The display name of the category.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Category.Transactions">
+            <summary>
+            Navigation property: transactions assigned to this category.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.ErrorViewModel">
+            <summary>
+            View model used by the error page to display request diagnostic information.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.ErrorViewModel.RequestId">
+            <summary>
+            The request identifier associated with the current request (if available).
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.ErrorViewModel.ShowRequestId">
+            <summary>
+            True if a RequestId is present and should be shown to the user.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.Transaction">
+            <summary>
+            Represents a financial transaction (income or expense).
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.Id">
+            <summary>
+            Primary key.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.Amount">
+            <summary>
+            the currency amount of the transaction. Must be positive.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.Date">
+            <summary>
+            Date of the transaction.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.Description">
+            <summary>
+            Short description or memo for the transaction.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.Type">
+            <summary>
+            Whether the transaction is an income or an expense.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.CategoryId">
+            <summary>
+            Foreign key to the assigned category.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.Category">
+            <summary>
+            Navigation property to the category assigned to this transaction.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.TransactionType">
+            <summary>
+            Classification for a transaction indicating whether it is income or expense.
+            </summary>
+        </member>
+        <member name="F:PersonalFinanceTracker.Models.TransactionType.Income">
+            <summary>
+            its an income.
+            </summary>
+        </member>
+        <member name="F:PersonalFinanceTracker.Models.TransactionType.Expense">
+            <summary>
+            its an expense.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.Transcript">
+            <summary>
+            Represents a saved archive of a completed transaction batch.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.Id">
+            <summary>
+            Primary key.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.Name">
+            <summary>
+            User-facing transcript name, such as "Taxes" or "Bills".
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.Description">
+            <summary>
+            Optional description for the saved transcript.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.DateCreated">
+            <summary>
+            When the transcript was saved.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.LastAccessed">
+            <summary>
+            When the transcript was last opened or updated.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.UserId">
+            <summary>
+            The owning user's identifier.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transcript.Transactions">
+            <summary>
+            Archived transaction rows captured in this transcript.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Models.TranscriptTransaction">
+            <summary>
+            Represents a copied transaction row stored inside a transcript archive.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.Id">
+            <summary>
+            Primary key.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.TranscriptId">
+            <summary>
+            Owning transcript.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.Transcript">
+            <summary>
+            Navigation to the transcript header.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.TransactionId">
+            <summary>
+            Source transaction identifier from the working table.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.Date">
+            <summary>
+            Transaction date at the time of archiving.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.Description">
+            <summary>
+            Transaction description at the time of archiving.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.Type">
+            <summary>
+            Income or expense classification.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.CategoryName">
+            <summary>
+            Category name snapshot taken when the transcript was created.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.TranscriptTransaction.Amount">
+            <summary>
+            Transaction amount at the time of archiving.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel">
+            <summary>
+            Page model for creating a new transaction.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel"/>.
+            </summary>
+            <param name="context">The application database context.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.Transaction">
+            <summary>
+            The transaction being created. Bound on POST.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.CategoryOptions">
+            <summary>
+            Options used to populate the category dropdown.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.OnGetAsync">
+            <summary>
+            GET handler. Ensures at least one category exists and loads the category options.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.OnPostAsync">
+            <summary>
+            POST handler that validates and persists the new transaction.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel">
+            <summary>
+            Page model for deleting a transaction.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel"/>.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.Transaction">
+            <summary>
+            The transaction selected for deletion.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.OnGetAsync(System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transaction to confirm deletion.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.OnPostAsync(System.Nullable{System.Int32})">
+            <summary>
+            POST handler that performs the deletion and redirects to the index.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transactions.IndexModel">
+            <summary>
+            Page model for listing transactions and saving them as a transcript archive.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.IndexModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
+            <summary>
+            Initializes a new instance of the <see cref="T:PersonalFinanceTracker.Pages.Transactions.IndexModel"/> class.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.IndexModel.Transactions">
+            <summary>
+            Transactions shown in the list view.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.IndexModel.TranscriptName">
+            <summary>
+            Name for the transcript when archiving transactions.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.IndexModel.OnGetAsync">
+            <summary>
+            Loads the current transactions for display.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.IndexModel.OnPostArchiveAsync">
+            <summary>
+            Archives the current transactions into a transcript and removes them from the working table.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel">
+            <summary>
+            Page model for viewing details of a single transaction.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel"/>.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel.Transaction">
+            <summary>
+            The transaction shown on the details page.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel.OnGetAsync(System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transaction by id.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel">
+            <summary>
+            Page model for updating an existing transaction.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel"/>.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.Transaction">
+            <summary>
+            The transaction being edited. Bound on POST.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.CategoryOptions">
+            <summary>
+            Options used to populate the category dropdown.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.OnGetAsync(System.Nullable{System.Int32})">
+            <summary>
+            GET handler. Loads the transaction for the provided id and category options.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.OnPostAsync">
+            <summary>
+            POST handler that applies changes and saves the transaction.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.DeleteModel">
+            <summary>
+            Page model for deleting a transcript archive header.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.DeleteModel"/>.
+            </summary>
+            <param name="context">Application DB context for accessing transcripts.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.Transcript">
+            <summary>
+            Bound transcript selected for deletion.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.OnGetAsync(System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transcript to confirm deletion.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.OnPostAsync(System.Nullable{System.Int32})">
+            <summary>
+            POST handler that deletes the transcript and redirects to the index.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel">
+            <summary>
+            Page model for removing a single archived transaction from a transcript.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel"/>.
+            </summary>
+            <param name="context">Application DB context for accessing transcripts and archived transactions.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.Transcript">
+            <summary>
+            Parent transcript header used for context in the confirmation view.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.TranscriptTransaction">
+            <summary>
+            Bound archived transaction selected for deletion.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.OnGetAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transcript and archived transaction to confirm deletion.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.OnPostAsync(System.Int32,System.Int32)">
+            <summary>
+            POST handler that deletes the archived transaction and updates the transcript timestamp.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.DetailsModel">
+            <summary>
+            Page model for viewing a transcript and its archived transactions.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DetailsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.DetailsModel"/>.
+            </summary>
+            <param name="context">Application DB context for loading transcripts and transactions.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.DetailsModel.Transcript">
+            <summary>
+            The transcript displayed on the details page.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DetailsModel.OnGetAsync(System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transcript header and its transactions for display.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.EditModel">
+            <summary>
+            Page model for editing a transcript header (name/description) and loading contained transactions.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.EditModel"/>.
+            </summary>
+            <param name="context">Application DB context for editing transcripts.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.EditModel.Transcript">
+            <summary>
+            Bound transcript being edited.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditModel.OnGetAsync(System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transcript and its transactions.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditModel.OnPostAsync">
+            <summary>
+            POST handler that saves edited transcript header values.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel">
+            <summary>
+            Page model for editing a single transcript transaction (an archived transaction row).
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel"/>.
+            </summary>
+            <param name="context">Application DB context for accessing transcript transactions.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.TranscriptTransaction">
+            <summary>
+            Bound transcript transaction being edited.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.Transcript">
+            <summary>
+            Parent transcript header for context when editing.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.OnGetAsync(System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            GET handler that loads the transcript and the selected archived transaction.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.OnPostAsync(System.Int32)">
+            <summary>
+            POST handler that applies edits to the archived transaction and updates the transcript's last accessed time.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.IndexModel">
+            <summary>
+            Backing page model for the transcripts summary view.
+            Groups existing transactions into monthly transcript rows.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.IndexModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:PersonalFinanceTracker.Pages.Transcripts.IndexModel"/> class.
+            </summary>
+            <param name="context">The application database context.</param>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.Transcripts">
+            <summary>
+            Saved transcript archive rows shown in the table.
+            </summary>
+        </member>
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.IndexModel.OnGetAsync">
+            <summary>
+            Loads saved transcript summaries from the archive tables.
+            </summary>
+        </member>
+        <member name="T:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary">
+            <summary>
+            Represents a single transcript archive row.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.Id">
+            <summary>
+            Transcript identifier.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.Name">
+            <summary>
+            Saved transcript name.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.Description">
+            <summary>
+            Optional transcript description.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.DateCreated">
+            <summary>
+            When the transcript was saved.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.LastAccessed">
+            <summary>
+            When the transcript was last accessed.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.UserId">
+            <summary>
+            Owning user identifier.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.TransactionCount">
+            <summary>
+            The number of transactions included in the transcript.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.TotalIncome">
+            <summary>
+            Total income for the transcript period.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.TotalExpenses">
+            <summary>
+            Total expenses for the transcript period.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.NetAmount">
+            <summary>
+            Net amount for the transcript period.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.TranscriptSummary.Status">
+            <summary>
+            A simple status label for the summary row.
+            </summary>
+        </member>
+        <member name="T:Program">
+            <summary>
+            Application entry point for the PersonalFinanceTracker web application.
+            </summary>
+        </member>
+    </members>
+</doc>

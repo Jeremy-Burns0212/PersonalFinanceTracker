@@ -41,6 +41,10 @@ namespace PersonalFinanceTracker.Data
 
 		// Note: IdentityDbContext already exposes Users, Roles, etc. Do not redeclare Users here.
 
+		/// <summary>
+		/// Configure EF Core model mappings and property precision/column types.
+		/// </summary>
+		/// <param name="modelBuilder">Model builder instance used to configure entity mappings.</param>
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);

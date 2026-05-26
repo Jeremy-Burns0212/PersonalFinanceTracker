@@ -8,6 +8,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
 {
+    /// <summary>
+    /// Page model for registering a new user account.
+    /// Handles creating the user, assigning a default role, and signing the user in.
+    /// </summary>
     [AllowAnonymous]
     public class RegisterModel(
         UserManager<AppUser> userManager,
@@ -20,39 +24,77 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
         private readonly RoleManager<IdentityRole> _roleManager = roleManager;
         private readonly ILogger<RegisterModel> _logger = logger;
 
+        /// <summary>
+        /// Bound input model for the registration form.
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; } = null!;
 
+        /// <summary>
+        /// Return URL after registration completes.
+        /// </summary>
         public string? ReturnUrl { get; set; }
 
+        /// <summary>
+        /// Input model for the registration form.
+        /// </summary>
         public class InputModel
         {
+            /// <summary>
+            /// User's email address (also used as the username).
+            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; } = null!;
 
+            /// <summary>
+            /// Password for the new account.
+            /// </summary>
             [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; } = null!;
 
+            /// <summary>
+            /// Confirmation of the password entry.
+            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; } = null!;
 
+            /// <summary>
+            /// Full name for display purposes.
+            /// </summary>
             [Required]
             [Display(Name = "Full Name")]
             [StringLength(100)]
             public string FullName { get; set; } = null!;
         }
 
+        /// <summary>
+        /// GET handler to initialize the registration page.
+        /// </summary>
+        /// <remarks>
+        /// Preserves the `returnUrl` so the UI can redirect after successful registration.
+        /// This is commonly used to return users to the page they were on before registering.
+        /// </remarks>
         public void OnGet(string? returnUrl = null)
         {
             ReturnUrl = returnUrl;
         }
 
+        /// <summary>
+        /// POST handler that attempts to create the user, assign a default role, and sign the user in.
+        /// Any Identity errors are added to the page's <see cref="Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary"/>.
+        /// </summary>
+        /// <remarks>
+        /// Creates an <see cref="PersonalFinanceTracker.Models.AppUser"/> using the application's
+        /// <see cref="Microsoft.AspNetCore.Identity.UserManager{TUser}"/> and persists it to the Identity store.
+        /// Note: `EmailConfirmed` is set to true for developer convenience; consider requiring email confirmation in production.
+        /// After creation the user is added to a default role ("User"). If the role does not exist it will be created.
+        /// </remarks>
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -68,6 +110,7 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
             {
                 try
                 {
+                    // Create a new AppUser instance from the posted form values.
                     AppUser user = new() 
                     { 
                         UserName = Input.Email, 
@@ -100,6 +143,7 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
                                 return Page();
                             }
                         }
+                        // Add the new user to the default role.
                         IdentityResult roleResult = await _userManager.AddToRoleAsync(user, defaultRole);
                         if (!roleResult.Succeeded)
                         {
