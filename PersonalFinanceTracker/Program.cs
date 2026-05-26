@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
 
+/// <summary>
+/// Application entry point for the PersonalFinanceTracker web application.
+/// </summary>
 public partial class Program
 {
     private static void Main(string[] args)

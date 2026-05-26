@@ -8,6 +8,10 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
 {
+    /// <summary>
+    /// Page model to allow a signed-in user to delete their account.
+    /// Removes the Identity user and signs the user out.
+    /// </summary>
     [Authorize]
     public class DeleteAccountModel : PageModel
     {
@@ -15,6 +19,12 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ApplicationDbContext _dbContext;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="DeleteAccountModel"/>.
+        /// </summary>
+        /// <param name="userManager">User manager for Identity operations.</param>
+        /// <param name="signInManager">Sign-in manager used to sign the user out after deletion.</param>
+        /// <param name="dbContext">Application DB context for optional cleanup of related data.</param>
         public DeleteAccountModel(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
@@ -22,6 +32,14 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// POST handler that deletes the current user's account and signs them out.
+        /// </summary>
+        /// <remarks>
+        /// Before deleting the Identity user, consider removing or archiving related application data
+        /// (for example, transactions or profile data). Perform that cleanup here if required.
+        /// Deleting the Identity user will remove the account from the authentication store.
+        /// </remarks>
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -30,8 +48,8 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
                 return NotFound();
             }
 
-            // Optional: remove related application data. Example: transactions owned by user (if such a relation exists)
-            // For now, just delete the Identity user.
+            // Optional: remove related application data here (e.g., transactions or profiles owned by the user).
+            // If you rely on cascade deletes or manual cleanup, perform that work before deleting the Identity user.
 
             var result = await _userManager.DeleteAsync(user);
             if (!result.Succeeded)

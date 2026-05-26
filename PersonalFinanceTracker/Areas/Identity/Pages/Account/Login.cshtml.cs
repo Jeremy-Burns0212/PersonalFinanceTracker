@@ -16,6 +16,10 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<AppUser> _signInManager;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="LoginModel"/>.
+        /// </summary>
+        /// <param name="signInManager">Sign-in manager used for authenticating users.</param>
         public LoginModel(SignInManager<AppUser> signInManager)
         {
             _signInManager = signInManager;
@@ -26,19 +30,31 @@ namespace PersonalFinanceTracker.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            /// <summary>
+            /// The user's login name or email used to identify the account.
+            /// </summary>
             [Required]
             [Display(Name = "Username")]
             public string UserName { get; set; } = string.Empty;
 
+            /// <summary>
+            /// The account password supplied by the user.
+            /// </summary>
             [Required]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Whether the authentication cookie should be persistent across browser sessions.
+            /// </summary>
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
 
+        /// <summary>
+        /// Bound input model for the login form.
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; } = new InputModel();
 

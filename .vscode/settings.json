@@ -2,7 +2,7 @@
   "cSpell.enabled": true,
   "cSpell.configFile": "${workspaceFolder}/cspell.json",
   "cSpell.autoAddWords": false,
-    "cSpell.words": [
+  "cSpell.words": [
         "antiforgery",
         "HSTS",
         "jquery",
@@ -11,4 +11,6 @@
         "onsubmit",
         "toggleable"
     ]
+  ,
+  "codescene.authToken": ""
 }

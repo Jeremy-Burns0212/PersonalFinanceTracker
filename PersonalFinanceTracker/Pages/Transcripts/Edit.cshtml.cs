@@ -7,18 +7,31 @@ using PersonalFinanceTracker.Models;
 namespace PersonalFinanceTracker.Pages.Transcripts
 {
 	// staged: add transcripts CRUD files
+	/// <summary>
+	/// Page model for editing a transcript header (name/description) and loading contained transactions.
+	/// </summary>
 	public class EditModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="EditModel"/>.
+		/// </summary>
+		/// <param name="context">Application DB context for editing transcripts.</param>
 		public EditModel(ApplicationDbContext context)
 		{
 			_context = context;
 		}
 
+		/// <summary>
+		/// Bound transcript being edited.
+		/// </summary>
 		[BindProperty]
 		public Transcript Transcript { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler that loads the transcript and its transactions.
+		/// </summary>
 		public async Task<IActionResult> OnGetAsync(int? id)
 		{
 			if (id is null)
@@ -39,6 +52,9 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 			return Page();
 		}
 
+		/// <summary>
+		/// POST handler that saves edited transcript header values.
+		/// </summary>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if (!ModelState.IsValid)

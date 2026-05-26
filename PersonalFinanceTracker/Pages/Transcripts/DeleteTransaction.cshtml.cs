@@ -7,20 +7,36 @@ using PersonalFinanceTracker.Models;
 namespace PersonalFinanceTracker.Pages.Transcripts
 {
 	// staged: add transcripts CRUD files
+	/// <summary>
+	/// Page model for removing a single archived transaction from a transcript.
+	/// </summary>
 	public class DeleteTransactionModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="DeleteTransactionModel"/>.
+		/// </summary>
+		/// <param name="context">Application DB context for accessing transcripts and archived transactions.</param>
 		public DeleteTransactionModel(ApplicationDbContext context)
 		{
 			_context = context;
 		}
 
+		/// <summary>
+		/// Parent transcript header used for context in the confirmation view.
+		/// </summary>
 		public Transcript Transcript { get; set; } = default!;
 
+		/// <summary>
+		/// Bound archived transaction selected for deletion.
+		/// </summary>
 		[BindProperty]
 		public TranscriptTransaction TranscriptTransaction { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler that loads the transcript and archived transaction to confirm deletion.
+		/// </summary>
 		public async Task<IActionResult> OnGetAsync(int? transcriptId, int? id)
 		{
 			if (transcriptId is null || id is null)
@@ -48,6 +64,9 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 			return Page();
 		}
 
+		/// <summary>
+		/// POST handler that deletes the archived transaction and updates the transcript timestamp.
+		/// </summary>
 		public async Task<IActionResult> OnPostAsync(int transcriptId, int id)
 		{
 			var transcript = await _context.Transcripts

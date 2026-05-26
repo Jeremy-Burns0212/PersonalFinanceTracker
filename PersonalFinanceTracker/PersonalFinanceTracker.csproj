@@ -4,6 +4,11 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Generate XML documentation file for API docs and tooling -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Write the XML doc next to the assembly output -->
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <!-- Do not suppress CS1591 warnings anymore; XML comments should be in place. -->
   </PropertyGroup>
 
   <ItemGroup>

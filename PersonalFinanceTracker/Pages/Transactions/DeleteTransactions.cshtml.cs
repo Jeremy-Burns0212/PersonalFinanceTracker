@@ -6,18 +6,30 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	/// <summary>
+	/// Page model for deleting a transaction.
+	/// </summary>
 	public class DeleteTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="DeleteTransactionsModel"/>.
+		/// </summary>
 		public DeleteTransactionsModel(ApplicationDbContext context)
 		{
 			_context = context;
 		}
 
+		/// <summary>
+		/// The transaction selected for deletion.
+		/// </summary>
 		[BindProperty]
 		public Transaction Transaction { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler that loads the transaction to confirm deletion.
+		/// </summary>
 		public async Task<IActionResult> OnGetAsync(int? id)
 		{
 			if (id is null)
@@ -38,6 +50,9 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			return Page();
 		}
 
+		/// <summary>
+		/// POST handler that performs the deletion and redirects to the index.
+		/// </summary>
 		public async Task<IActionResult> OnPostAsync(int? id)
 		{
 			if (id is null)

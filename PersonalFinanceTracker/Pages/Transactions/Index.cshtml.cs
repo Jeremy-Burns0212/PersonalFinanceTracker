@@ -7,22 +7,37 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	/// <summary>
+	/// Page model for listing transactions and saving them as a transcript archive.
+	/// </summary>
 	public class IndexModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<AppUser> _userManager;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="IndexModel"/> class.
+		/// </summary>
 		public IndexModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
 			_userManager = userManager;
 		}
 
+		/// <summary>
+		/// Transactions shown in the list view.
+		/// </summary>
 		public IList<Transaction> Transactions { get; set; } = new List<Transaction>();
 
+		/// <summary>
+		/// Name for the transcript when archiving transactions.
+		/// </summary>
 		[BindProperty]
 		public string TranscriptName { get; set; } = string.Empty;
 
+		/// <summary>
+		/// Loads the current transactions for display.
+		/// </summary>
 		public async Task OnGetAsync()
 		{
 			Transactions = await _context.Transactions
@@ -31,6 +46,9 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				.ToListAsync();
 		}
 
+		/// <summary>
+		/// Archives the current transactions into a transcript and removes them from the working table.
+		/// </summary>
 		public async Task<IActionResult> OnPostArchiveAsync()
 		{
 			var currentTransactions = await _context.Transactions
