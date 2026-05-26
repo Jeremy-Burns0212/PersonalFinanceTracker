@@ -6,6 +6,7 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transcripts
 {
+	// staged: add transcripts CRUD files
 	public class DeleteModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
