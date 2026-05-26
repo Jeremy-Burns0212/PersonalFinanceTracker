@@ -3,9 +3,9 @@
 A data-driven ASP.NET Core MVC web application I'm making that helps users track income, expenses, categorizes expenses, and set savings goals. Built with EF Core and SQL Server.
 
 ## Features
-- [ ] User authentication
-- [ ] Add, edit, and delete transactions
-- [ ] Categorize income and expenses
+- [x] User authentication
+- [x] Add, edit, and delete transactions
+- [x] Categorize income and expenses
 - [ ] Dashboard with financial summaries and charts
 - [ ] Optional: savings goals and budget tracking
 
