@@ -36,6 +36,34 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 
 var app = builder.Build();
 
+// Apply any pending EF Core migrations on startup to ensure the database schema matches the model.
+// This avoids runtime SQL errors such as "Invalid column name 'UserId'" when migrations haven't been applied.
+using (var scope = app.Services.CreateScope())
+{
+	var services = scope.ServiceProvider;
+	var db = services.GetRequiredService<ApplicationDbContext>();
+	db.Database.Migrate();
+
+	// Repair older LocalDB instances that were created before the Transactions.UserId migration.
+	db.Database.ExecuteSqlRaw("""
+		IF COL_LENGTH('dbo.Transactions', 'UserId') IS NULL
+		BEGIN
+			ALTER TABLE [dbo].[Transactions]
+			ADD [UserId] nvarchar(450) NOT NULL CONSTRAINT [DF_Transactions_UserId] DEFAULT('');
+		END
+
+		IF NOT EXISTS (
+			SELECT 1
+			FROM sys.indexes
+			WHERE name = 'IX_Transactions_UserId'
+			  AND object_id = OBJECT_ID('dbo.Transactions')
+		)
+		BEGIN
+			CREATE INDEX [IX_Transactions_UserId] ON [dbo].[Transactions] ([UserId]);
+		END
+		""");
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

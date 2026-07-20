@@ -11,7 +11,7 @@ namespace PersonalFinanceTracker.Models
 		public decimal? Amount { get; set; }
 
 		[Required]
-        [DataType(DataType.Date)]
+		[DataType(DataType.Date)]
 		public required DateOnly Date { get; set; }
 
 		[Required]
@@ -26,6 +26,10 @@ namespace PersonalFinanceTracker.Models
 
 		public Category? Category { get; set; }
 
+		[StringLength(450)]
+		public string UserId { get; set; } = string.Empty;
+
+		public AppUser? User { get; set; }
 	}
 
 	public enum TransactionType

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,17 +9,20 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	[Authorize]
 	public class UpdateTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public UpdateTransactionsModel(ApplicationDbContext context)
+		public UpdateTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		[BindProperty]
-        public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
+		public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
 
 		public SelectList CategoryOptions { get; set; } = default!;
 
@@ -30,7 +35,15 @@ namespace PersonalFinanceTracker.Pages.Transactions
 
 			await EnsureDefaultCategoryAsync();
 
-			var transaction = await _context.Transactions.FindAsync(id);
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
+			var transaction = await _context.Transactions
+				.Include(t => t.Category)
+				.FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 			if (transaction is null)
 			{
 				return NotFound();
@@ -49,7 +62,24 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				return Page();
 			}
 
-			_context.Attach(Transaction).State = EntityState.Modified;
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
+			var transactionToUpdate = await _context.Transactions
+				.FirstOrDefaultAsync(t => t.Id == Transaction.Id && t.UserId == userId);
+			if (transactionToUpdate is null)
+			{
+				return NotFound();
+			}
+
+			transactionToUpdate.Amount = Transaction.Amount;
+			transactionToUpdate.Date = Transaction.Date;
+			transactionToUpdate.Description = Transaction.Description;
+			transactionToUpdate.Type = Transaction.Type;
+			transactionToUpdate.CategoryId = Transaction.CategoryId;
 
 			try
 			{
@@ -57,7 +87,7 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			}
 			catch (DbUpdateConcurrencyException)
 			{
-				if (!await TransactionExistsAsync(Transaction.Id))
+				if (!await TransactionExistsAsync(Transaction.Id, userId))
 				{
 					return NotFound();
 				}
@@ -68,8 +98,8 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			return RedirectToPage("./Index");
 		}
 
-		private async Task<bool> TransactionExistsAsync(int id)
-			=> await _context.Transactions.AnyAsync(e => e.Id == id);
+		private async Task<bool> TransactionExistsAsync(int id, string userId)
+			=> await _context.Transactions.AnyAsync(e => e.Id == id && e.UserId == userId);
 
 		private async Task EnsureDefaultCategoryAsync()
 		{

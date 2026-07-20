@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,13 +8,16 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	[Authorize]
 	public class DeleteTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public DeleteTransactionsModel(ApplicationDbContext context)
+		public DeleteTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		[BindProperty]
@@ -25,9 +30,15 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				return NotFound();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
 			var transaction = await _context.Transactions
 				.Include(t => t.Category)
-				.FirstOrDefaultAsync(m => m.Id == id);
+				.FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
 
 			if (transaction is null)
 			{
@@ -45,7 +56,13 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				return NotFound();
 			}
 
-			var transaction = await _context.Transactions.FindAsync(id);
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
+			var transaction = await _context.Transactions.FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 			if (transaction is not null)
 			{
 				_context.Transactions.Remove(transaction);
