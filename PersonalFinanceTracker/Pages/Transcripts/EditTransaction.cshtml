@@ -1,0 +1,60 @@
+@page "{transcriptId:int}/{id:int}"
+@model PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel
+
+@{
+    ViewData["Title"] = "Edit Archived Transaction";
+}
+
+@* staged: add transcripts CRUD files *@
+
+<h1>Edit Archived Transaction</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <input type="hidden" name="transcriptId" value="@Model.Transcript.Id" />
+            <input type="hidden" asp-for="TranscriptTransaction.Id" />
+            <input type="hidden" asp-for="TranscriptTransaction.TranscriptId" />
+            <input type="hidden" asp-for="TranscriptTransaction.TransactionId" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="TranscriptTransaction.Date" class="form-label"></label>
+                <input asp-for="TranscriptTransaction.Date" class="form-control" />
+                <span asp-validation-for="TranscriptTransaction.Date" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TranscriptTransaction.Description" class="form-label"></label>
+                <input asp-for="TranscriptTransaction.Description" class="form-control" />
+                <span asp-validation-for="TranscriptTransaction.Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TranscriptTransaction.Type" class="form-label"></label>
+                <select asp-for="TranscriptTransaction.Type" class="form-select" asp-items="Html.GetEnumSelectList<TransactionType>()"></select>
+                <span asp-validation-for="TranscriptTransaction.Type" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TranscriptTransaction.CategoryName" class="form-label"></label>
+                <input asp-for="TranscriptTransaction.CategoryName" class="form-control" />
+                <span asp-validation-for="TranscriptTransaction.CategoryName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TranscriptTransaction.Amount" class="form-label"></label>
+                <input asp-for="TranscriptTransaction.Amount" class="form-control" />
+                <span asp-validation-for="TranscriptTransaction.Amount" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-page="./Edit" asp-route-id="@Model.Transcript.Id" class="btn btn-secondary">Back to transcript</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

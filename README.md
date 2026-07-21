@@ -1,12 +1,12 @@
 # Personal Finance Tracker
 
-A data-driven ASP.NET Core MVC web application I'm making that helps users track income, expenses, categorizes expenses, and set savings goals. Built with EF Core and SQL Server.
+The Personal Finance Tracker is an ASP.NET Core MVC web application for tracking income and expenses, categorizing transactions, and viewing basic financial summaries. It uses EF Core and SQL Server for data storage and ASP.NET Core Identity for user authentication.
 
 ## Features
-- [ ] User authentication
-- [ ] Add, edit, and delete transactions
-- [ ] Categorize income and expenses
-- [ ] Dashboard with financial summaries and charts
+- [x] User authentication
+- [x] Add, edit, and delete transactions
+- [x] Categorize income and expenses
+- [x] Area for users to make collected lists of transactions i.e. transcripts
 - [ ] Optional: savings goals and budget tracking
 
 ## Required Software

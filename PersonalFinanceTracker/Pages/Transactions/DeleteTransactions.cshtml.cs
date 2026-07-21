@@ -9,6 +9,9 @@ using PersonalFinanceTracker.Models;
 namespace PersonalFinanceTracker.Pages.Transactions
 {
 	[Authorize]
+	/// <summary>
+	/// Page model for deleting a transaction.
+	/// </summary>
 	public class DeleteTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
@@ -20,9 +23,15 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			_userManager = userManager;
 		}
 
+		/// <summary>
+		/// The transaction selected for deletion.
+		/// </summary>
 		[BindProperty]
 		public Transaction Transaction { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler that loads the transaction to confirm deletion.
+		/// </summary>
 		public async Task<IActionResult> OnGetAsync(int? id)
 		{
 			if (id is null)
@@ -49,6 +58,9 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			return Page();
 		}
 
+		/// <summary>
+		/// POST handler that performs the deletion and redirects to the index.
+		/// </summary>
 		public async Task<IActionResult> OnPostAsync(int? id)
 		{
 			if (id is null)

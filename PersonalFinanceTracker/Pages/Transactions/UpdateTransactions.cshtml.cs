@@ -10,22 +10,37 @@ using PersonalFinanceTracker.Models;
 namespace PersonalFinanceTracker.Pages.Transactions
 {
 	[Authorize]
+	/// <summary>
+	/// Page model for updating an existing transaction.
+	/// </summary>
 	public class UpdateTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<AppUser> _userManager;
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="UpdateTransactionsModel"/>.
+		/// </summary>
 		public UpdateTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
 			_userManager = userManager;
 		}
 
+		/// <summary>
+		/// The transaction being edited. Bound on POST.
+		/// </summary>
 		[BindProperty]
 		public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
 
+		/// <summary>
+		/// Options used to populate the category dropdown.
+		/// </summary>
 		public SelectList CategoryOptions { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler. Loads the transaction for the provided id and category options.
+		/// </summary>
 		public async Task<IActionResult> OnGetAsync(int? id)
 		{
 			if (id is null)
@@ -54,6 +69,9 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			return Page();
 		}
 
+		/// <summary>
+		/// POST handler that applies changes and saves the transaction.
+		/// </summary>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if (!ModelState.IsValid)
