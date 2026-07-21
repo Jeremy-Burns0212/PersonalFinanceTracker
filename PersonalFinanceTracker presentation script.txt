@@ -1,0 +1,16 @@
+subject 1:  self introduction and primary reason for making the project
+
+subject 2:  talk about what things were used to make the project,
+		    Razor Pages, the  use of MVC, CRUD, ASP.NET Identity, etc.
+			
+subject 3:  talk about the transcripts and transactions pages,
+			since theyre the main focus of this project
+
+subject 4:  talk about what went well and what particular headaches
+			you ran into during production and what you would change
+			if you could start it over from scratch
+			
+subject 5:  demoing plan as follows - if going over technical stuff
+			look in vs code, at the code, when talking about
+			functionality, main features, or what went well, look at site
+			(live, in-person demo during presentation

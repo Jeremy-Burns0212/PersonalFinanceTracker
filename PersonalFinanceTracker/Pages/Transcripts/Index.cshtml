@@ -1,0 +1,61 @@
+@page
+@model PersonalFinanceTracker.Pages.Transcripts.IndexModel
+
+@{
+    ViewData["Title"] = "Transcripts";
+}
+
+<div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Transcripts</h1>
+        <p class="text-muted mb-0">Saved transaction archives you can keep separate by purpose, like taxes or bills.</p>
+    </div>
+    <a asp-page="/Transactions/Index" class="btn btn-primary">View Transactions</a>
+</div>
+
+@if (Model.Transcripts.Count == 0)
+{
+    <div class="alert alert-info">
+        There are no saved transcripts yet.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Saved</th>
+                    <th>Transactions</th>
+                    <th>Description</th>
+                    <th>Total Income</th>
+                    <th>Total Expenses</th>
+                    <th>Net Amount</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var transcript in Model.Transcripts)
+            {
+                <tr>
+                    <td>@transcript.Name</td>
+                    <td>@transcript.DateCreated.ToLocalTime().ToString("g")</td>
+                    <td>@transcript.TransactionCount</td>
+                    <td>@(transcript.Description ?? "-")</td>
+                    <td>@transcript.TotalIncome.ToString("C")</td>
+                    <td>@transcript.TotalExpenses.ToString("C")</td>
+                    <td>@transcript.NetAmount.ToString("C")</td>
+                    <td><span class="badge bg-secondary">@transcript.Status</span></td>
+                    <td class="text-nowrap">
+                        <a asp-page="./Details" asp-route-id="@transcript.Id" class="btn btn-sm btn-secondary">Details</a>
+                        <a asp-page="./Edit" asp-route-id="@transcript.Id" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-page="./Delete" asp-route-id="@transcript.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

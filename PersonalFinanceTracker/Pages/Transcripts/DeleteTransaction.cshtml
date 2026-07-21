@@ -1,0 +1,39 @@
+@page "{transcriptId:int}/{id:int}"
+@model PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel
+
+@{
+    ViewData["Title"] = "Delete Archived Transaction";
+}
+
+@* staged: add transcripts CRUD files *@
+
+<h1>Delete Archived Transaction</h1>
+
+<h3>Are you sure you want to delete this archived transaction?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Date</dt>
+        <dd class="col-sm-9">@Model.TranscriptTransaction.Date.ToString("d")</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.TranscriptTransaction.Description</dd>
+
+        <dt class="col-sm-3">Type</dt>
+        <dd class="col-sm-9">@Model.TranscriptTransaction.Type</dd>
+
+        <dt class="col-sm-3">Category</dt>
+        <dd class="col-sm-9">@(Model.TranscriptTransaction.CategoryName ?? "-")</dd>
+
+        <dt class="col-sm-3">Amount</dt>
+        <dd class="col-sm-9">@Model.TranscriptTransaction.Amount.ToString("C")</dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="TranscriptTransaction.Id" />
+        <input type="hidden" asp-for="TranscriptTransaction.TranscriptId" />
+        <input type="hidden" asp-for="TranscriptTransaction.TransactionId" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-page="./Edit" asp-route-id="@Model.TranscriptTransaction.TranscriptId" class="btn btn-secondary">Back to transcript</a>
+    </form>
+</div>

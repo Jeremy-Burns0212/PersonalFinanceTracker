@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Watch PersonalFinanceTracker in Edge",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "C:\\Program Files\\dotnet\\dotnet.exe",
+            "args": [
+                "watch",
+                "run",
+                "--no-launch-profile",
+                "--project",
+                "PersonalFinanceTracker.csproj",
+                "--",
+                "--urls",
+                "http://127.0.0.1:5235"
+            ],
+            "cwd": "${workspaceFolder}/PersonalFinanceTracker",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "serverReadyAction": {
+                "action": "debugWithEdge",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }
+        }
+    ]
+}

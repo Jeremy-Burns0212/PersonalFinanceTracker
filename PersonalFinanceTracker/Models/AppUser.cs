@@ -15,5 +15,12 @@ namespace PersonalFinanceTracker.Models
 		[Required]
 		[StringLength(100)]
 		public string FullName { get; set; } = string.Empty;
+
+		/// <summary>
+		/// The user's confirmed email address. This shadows the base property to enforce validation at the model level.
+		/// </summary>
+		[Required]
+		[EmailAddress]
+		public new string? Email { get; set; }
 	}
 }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,26 +9,50 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	
+	/// <summary>
+	/// Page model for creating a new transaction.
+	/// </summary>
+	[Authorize]
 	public class CreateTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public CreateTransactionsModel(ApplicationDbContext context)
+		/// <summary>
+		/// Initializes a new instance of <see cref="CreateTransactionsModel"/>.
+		/// </summary>
+		/// <param name="context">The application database context.</param>
+		/// <param name="userManager">The user manager for handling user information.</param>
+		public CreateTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
-
+    
+		/// <summary>
+		/// The transaction being created. Bound on POST.
+		/// </summary>
 		[BindProperty]
-       public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
+		public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
 
+		/// <summary>
+		/// Options used to populate the category dropdown.
+		/// </summary>
 		public SelectList CategoryOptions { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler. Ensures at least one category exists and loads the category options.
+		/// </summary>
 		public async Task OnGetAsync()
 		{
 			await EnsureDefaultCategoryAsync();
 			await LoadCategoryOptionsAsync();
 		}
 
+		/// <summary>
+		/// POST handler that validates and persists the new transaction.
+		/// </summary>
 		public async Task<IActionResult> OnPostAsync()
 		{
 			if (!ModelState.IsValid)
@@ -35,6 +61,13 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				return Page();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
+			Transaction.UserId = userId;
 			_context.Transactions.Add(Transaction);
 			await _context.SaveChangesAsync();
 

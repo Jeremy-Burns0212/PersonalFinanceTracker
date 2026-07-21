@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -6,17 +8,35 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	/// <summary>
+	/// Page model for viewing details of a single transaction.
+	/// </summary>
+	[Authorize]
 	public class DetailsTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
-		public DetailsTransactionsModel(ApplicationDbContext context)
+		
+		/// <summary>
+		/// Initializes a new instance of <see cref="DetailsTransactionsModel"/>.
+		/// </summary>
+		/// <param name="context">The application database context.</param>
+		/// <param name="userManager">The user manager for handling user information.</param>
+    public DetailsTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
+		/// <summary>
+		/// The transaction shown on the details page.
+		/// </summary>
 		public Transaction Transaction { get; set; } = default!;
 
+		/// <summary>
+		/// GET handler that loads the transaction by id.
+		/// </summary>
 		public async Task<IActionResult> OnGetAsync(int? id)
 		{
 			if (id is null)
@@ -24,9 +44,15 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				return NotFound();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
 			var transaction = await _context.Transactions
 				.Include(t => t.Category)
-				.FirstOrDefaultAsync(m => m.Id == id);
+				.FirstOrDefaultAsync(m => m.Id == id && m.UserId == userId);
 
 			if (transaction is null)
 			{
