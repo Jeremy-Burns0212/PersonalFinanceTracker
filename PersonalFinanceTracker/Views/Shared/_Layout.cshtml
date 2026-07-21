@@ -18,7 +18,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark app-nav border-bottom box-shadow">
             <div class="container-fluid">
-                <a class="navbar-brand fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Personal Finance Tracker</a>
+                <a class="navbar-brand text-white" asp-area="" asp-controller="Home" asp-action="Index">Personal Finance Tracker</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -43,12 +43,12 @@
 
                         @if (User?.Identity?.IsAuthenticated ?? false)
                         {
-                            <span class="navbar-text nav-user-pill">Welcome, @(currentUser?.FullName ?? User.Identity?.Name)</span>
+                            <span class="navbar-text me-3 text-white" style="white-space: nowrap;">Welcome, @(currentUser?.FullName ?? User.Identity?.Name)</span>
 
                             <ul class="navbar-nav align-items-center gap-2">
                                 <li class="nav-item">
                                     <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline" asp-antiforgery="true">
-                                        <button type="submit" class="btn btn-sm btn-outline-light nav-action">Logout</button>
+                                        <button type="submit" class="nav-link text-white p-0 bg-transparent border-0">Logout</button>
                                     </form>
                                 </li>
                                 <li class="nav-item">

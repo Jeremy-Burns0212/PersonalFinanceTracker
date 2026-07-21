@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	[Authorize]
 	/// <summary>
 	/// Page model for listing transactions and saving them as a transcript archive.
 	/// </summary>
@@ -40,9 +42,18 @@ namespace PersonalFinanceTracker.Pages.Transactions
 		/// </summary>
 		public async Task OnGetAsync()
 		{
-			Transactions = await _context.Transactions
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				Transactions = new List<Transaction>();
+				return;
+			}
+
+			IOrderedQueryable<Transaction> transactions = _context.Transactions
 				.Include(t => t.Category)
-				.OrderByDescending(t => t.Date)
+				.Where(t => t.UserId == userId)
+				.OrderByDescending(t => t.Date);
+			Transactions = await transactions
 				.ToListAsync();
 		}
 

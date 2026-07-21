@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -7,27 +9,31 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
+	[Authorize]
 	/// <summary>
 	/// Page model for creating a new transaction.
 	/// </summary>
 	public class CreateTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
-
+		private readonly UserManager<AppUser> _userManager;
+    
 		/// <summary>
 		/// Initializes a new instance of <see cref="CreateTransactionsModel"/>.
 		/// </summary>
 		/// <param name="context">The application database context.</param>
+		public CreateTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		public CreateTransactionsModel(ApplicationDbContext context)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
-
+    
+		[BindProperty]
 		/// <summary>
 		/// The transaction being created. Bound on POST.
 		/// </summary>
-		[BindProperty]
-		public Transaction Transaction { get; set; } = default!;
+		public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
 
 		/// <summary>
 		/// Options used to populate the category dropdown.
@@ -54,6 +60,13 @@ namespace PersonalFinanceTracker.Pages.Transactions
 				return Page();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
+			Transaction.UserId = userId;
 			_context.Transactions.Add(Transaction);
 			await _context.SaveChangesAsync();
 

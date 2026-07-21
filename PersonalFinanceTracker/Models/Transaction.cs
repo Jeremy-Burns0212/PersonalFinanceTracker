@@ -49,6 +49,11 @@ namespace PersonalFinanceTracker.Models
 		/// Navigation property to the category assigned to this transaction.
 		/// </summary>
 		public Category? Category { get; set; }
+
+		[StringLength(450)]
+		public string UserId { get; set; } = string.Empty;
+
+		public AppUser? User { get; set; }
 	}
 
 	/// <summary>
