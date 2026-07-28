@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,21 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 	/// <summary>
 	/// Page model for removing a single archived transaction from a transcript.
 	/// </summary>
+	[Authorize]
 	public class DeleteTransactionModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="DeleteTransactionModel"/>.
 		/// </summary>
 		/// <param name="context">Application DB context for accessing transcripts and archived transactions.</param>
-		public DeleteTransactionModel(ApplicationDbContext context)
+		/// <param name="userManager">The user manager for accessing the current user.</param>
+		public DeleteTransactionModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		/// <summary>
@@ -69,9 +75,15 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 		/// </summary>
 		public async Task<IActionResult> OnPostAsync(int transcriptId, int id)
 		{
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
 			var transcript = await _context.Transcripts
 				.Include(item => item.Transactions)
-				.FirstOrDefaultAsync(item => item.Id == transcriptId);
+				.FirstOrDefaultAsync(item => item.Id == transcriptId && item.UserId == userId);
 
 			if (transcript is null)
 			{

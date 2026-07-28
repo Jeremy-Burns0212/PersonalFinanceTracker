@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,21 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 	/// <summary>
 	/// Page model for editing a single transcript transaction (an archived transaction row).
 	/// </summary>
+	[Authorize]
 	public class EditTransactionModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="EditTransactionModel"/>.
 		/// </summary>
 		/// <param name="context">Application DB context for accessing transcript transactions.</param>
-		public EditTransactionModel(ApplicationDbContext context)
+		/// <param name="userManager">The user manager for accessing the current user.</param>
+		public EditTransactionModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		/// <summary>
@@ -44,9 +50,15 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 				return NotFound();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
 			var transcript = await _context.Transcripts
 				.Include(item => item.Transactions)
-				.FirstOrDefaultAsync(item => item.Id == transcriptId);
+				.FirstOrDefaultAsync(item => item.Id == transcriptId && item.UserId == userId);
 
 			if (transcript is null)
 			{
@@ -75,9 +87,15 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 				return Page();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
 			var transcript = await _context.Transcripts
 				.Include(item => item.Transactions)
-				.FirstOrDefaultAsync(item => item.Id == transcriptId);
+				.FirstOrDefaultAsync(item => item.Id == transcriptId && item.UserId == userId);
 
 			if (transcript is null)
 			{
@@ -104,9 +122,15 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 
 		private async Task LoadTranscriptAsync(int transcriptId)
 		{
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return;
+			}
+
 			var transcript = await _context.Transcripts
 				.Include(item => item.Transactions)
-				.FirstOrDefaultAsync(item => item.Id == transcriptId);
+				.FirstOrDefaultAsync(item => item.Id == transcriptId && item.UserId == userId);
 
 			if (transcript is not null)
 			{
