@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
@@ -9,17 +11,21 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 	/// Backing page model for the transcripts summary view.
 	/// Groups existing transactions into monthly transcript rows.
 	/// </summary>
+	[Authorize]
 	public class IndexModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndexModel"/> class.
 		/// </summary>
 		/// <param name="context">The application database context.</param>
-		public IndexModel(ApplicationDbContext context)
+		/// <param name="userManager">The user manager for accessing the current user.</param>
+		public IndexModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		/// <summary>
@@ -32,8 +38,16 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 		/// </summary>
 		public async Task OnGetAsync()
 		{
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				Transcripts = new List<TranscriptSummary>();
+				return;
+			}
+
 			var archivedTranscripts = await _context.Transcripts
 				.AsNoTracking()
+				.Where(t => t.UserId == userId)
 				.Include(t => t.Transactions)
 				.ToListAsync();
 

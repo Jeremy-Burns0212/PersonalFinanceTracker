@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Data;
 using PersonalFinanceTracker.Models;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
-	[Authorize]
+	
 	/// <summary>
 	/// Page model for listing transactions and saving them as a transcript archive.
 	/// </summary>
+	[Authorize]
 	public class IndexModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
@@ -20,6 +21,8 @@ namespace PersonalFinanceTracker.Pages.Transactions
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IndexModel"/> class.
 		/// </summary>
+		/// <param name="context">The application database context.</param>
+		/// <param name="userManager">The user manager for handling user information.</param>
 		public IndexModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
@@ -58,12 +61,21 @@ namespace PersonalFinanceTracker.Pages.Transactions
 		}
 
 		/// <summary>
-		/// Archives the current transactions into a transcript and removes them from the working table.
+		/// Archives the current user's transactions into a transcript and removes them from the working table.
 		/// </summary>
 		public async Task<IActionResult> OnPostArchiveAsync()
 		{
+			var currentUser = await _userManager.GetUserAsync(User);
+			if (currentUser is null)
+			{
+				ModelState.AddModelError(string.Empty, "You must be signed in to save a transcript.");
+				Transactions = new List<Transaction>();
+				return Page();
+			}
+
 			var currentTransactions = await _context.Transactions
 				.Include(transaction => transaction.Category)
+				.Where(transaction => transaction.UserId == currentUser.Id)
 				.OrderByDescending(transaction => transaction.Date)
 				.ToListAsync();
 
@@ -77,14 +89,6 @@ namespace PersonalFinanceTracker.Pages.Transactions
 			if (string.IsNullOrWhiteSpace(TranscriptName))
 			{
 				ModelState.AddModelError(nameof(TranscriptName), "Transcript name is required.");
-				Transactions = currentTransactions;
-				return Page();
-			}
-
-			var currentUser = await _userManager.GetUserAsync(User);
-			if (currentUser is null)
-			{
-				ModelState.AddModelError(string.Empty, "You must be signed in to save a transcript.");
 				Transactions = currentTransactions;
 				return Page();
 			}

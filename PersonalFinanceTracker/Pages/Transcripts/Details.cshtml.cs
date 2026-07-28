@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,21 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 	/// <summary>
 	/// Page model for viewing a transcript and its archived transactions.
 	/// </summary>
+	[Authorize]
 	public class DetailsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly UserManager<AppUser> _userManager;
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="DetailsModel"/>.
 		/// </summary>
 		/// <param name="context">Application DB context for loading transcripts and transactions.</param>
-		public DetailsModel(ApplicationDbContext context)
+		/// <param name="userManager">The user manager for accessing the current user.</param>
+		public DetailsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
+			_userManager = userManager;
 		}
 
 		/// <summary>
@@ -38,10 +44,16 @@ namespace PersonalFinanceTracker.Pages.Transcripts
 				return NotFound();
 			}
 
+			var userId = _userManager.GetUserId(User);
+			if (string.IsNullOrEmpty(userId))
+			{
+				return Challenge();
+			}
+
 			var transcript = await _context.Transcripts
 				.AsNoTracking()
 				.Include(item => item.Transactions)
-				.FirstOrDefaultAsync(item => item.Id == id);
+				.FirstOrDefaultAsync(item => item.Id == id && item.UserId == userId);
 
 			if (transcript is null)
 			{

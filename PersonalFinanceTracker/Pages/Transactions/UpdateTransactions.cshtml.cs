@@ -9,10 +9,11 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
-	[Authorize]
+	
 	/// <summary>
 	/// Page model for updating an existing transaction.
 	/// </summary>
+	[Authorize]
 	public class UpdateTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;

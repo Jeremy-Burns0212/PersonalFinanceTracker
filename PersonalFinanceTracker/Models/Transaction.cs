@@ -50,9 +50,15 @@ namespace PersonalFinanceTracker.Models
 		/// </summary>
 		public Category? Category { get; set; }
 
+		/// <summary>
+		/// Foreign key to the user who created the transaction.
+		/// </summary>
 		[StringLength(450)]
 		public string UserId { get; set; } = string.Empty;
 
+		/// <summary>
+		/// Navigation property to the user who created the transaction.
+		/// </summary>
 		public AppUser? User { get; set; }
 	}
 

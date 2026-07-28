@@ -9,30 +9,31 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
-	[Authorize]
+	
 	/// <summary>
 	/// Page model for creating a new transaction.
 	/// </summary>
+	[Authorize]
 	public class CreateTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<AppUser> _userManager;
-    
+
 		/// <summary>
 		/// Initializes a new instance of <see cref="CreateTransactionsModel"/>.
 		/// </summary>
 		/// <param name="context">The application database context.</param>
+		/// <param name="userManager">The user manager for handling user information.</param>
 		public CreateTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
-		public CreateTransactionsModel(ApplicationDbContext context)
 		{
 			_context = context;
 			_userManager = userManager;
 		}
     
-		[BindProperty]
 		/// <summary>
 		/// The transaction being created. Bound on POST.
 		/// </summary>
+		[BindProperty]
 		public Transaction Transaction { get; set; } = new() { Date = DateOnly.FromDateTime(DateTime.UtcNow) };
 
 		/// <summary>

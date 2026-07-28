@@ -8,15 +8,21 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
-	[Authorize]
+	
 	/// <summary>
 	/// Page model for deleting a transaction.
 	/// </summary>
+	[Authorize]
 	public class DeleteTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
 		private readonly UserManager<AppUser> _userManager;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DeleteTransactionsModel"/> class.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="userManager"></param>
 		public DeleteTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;

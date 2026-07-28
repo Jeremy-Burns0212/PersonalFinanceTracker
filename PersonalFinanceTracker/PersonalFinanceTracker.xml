@@ -252,6 +252,27 @@
         <member name="M:PersonalFinanceTracker.Migrations.AddTranscriptsArchive.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:PersonalFinanceTracker.Migrations.AddTransactionUserId">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddTransactionUserId.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AddTransactionUserId.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="T:PersonalFinanceTracker.Migrations.AlignTransactionModel">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AlignTransactionModel.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AlignTransactionModel.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:PersonalFinanceTracker.Migrations.AlignTransactionModel.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
         <member name="T:PersonalFinanceTracker.Models.AppUser">
             <summary>
             Represents an application user for Identity with application-specific properties.
@@ -341,6 +362,16 @@
         <member name="P:PersonalFinanceTracker.Models.Transaction.Category">
             <summary>
             Navigation property to the category assigned to this transaction.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.UserId">
+            <summary>
+            Foreign key to the user who created the transaction.
+            </summary>
+        </member>
+        <member name="P:PersonalFinanceTracker.Models.Transaction.User">
+            <summary>
+            Navigation property to the user who created the transaction.
             </summary>
         </member>
         <member name="T:PersonalFinanceTracker.Models.TransactionType">
@@ -453,11 +484,12 @@
             Page model for creating a new transaction.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel"/>.
             </summary>
             <param name="context">The application database context.</param>
+            <param name="userManager">The user manager for handling user information.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transactions.CreateTransactionsModel.Transaction">
             <summary>
@@ -484,10 +516,12 @@
             Page model for deleting a transaction.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
-            Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel"/>.
+            Initializes a new instance of the <see cref="T:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel"/> class.
             </summary>
+            <param name="context"></param>
+            <param name="userManager"></param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transactions.DeleteTransactionsModel.Transaction">
             <summary>
@@ -513,6 +547,8 @@
             <summary>
             Initializes a new instance of the <see cref="T:PersonalFinanceTracker.Pages.Transactions.IndexModel"/> class.
             </summary>
+            <param name="context">The application database context.</param>
+            <param name="userManager">The user manager for handling user information.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transactions.IndexModel.Transactions">
             <summary>
@@ -531,7 +567,7 @@
         </member>
         <member name="M:PersonalFinanceTracker.Pages.Transactions.IndexModel.OnPostArchiveAsync">
             <summary>
-            Archives the current transactions into a transcript and removes them from the working table.
+            Archives the current user's transactions into a transcript and removes them from the working table.
             </summary>
         </member>
         <member name="T:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel">
@@ -539,10 +575,12 @@
             Page model for viewing details of a single transaction.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel"/>.
             </summary>
+            <param name="context">The application database context.</param>
+            <param name="userManager">The user manager for handling user information.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transactions.DetailsTransactionsModel.Transaction">
             <summary>
@@ -559,7 +597,7 @@
             Page model for updating an existing transaction.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transactions.UpdateTransactionsModel"/>.
             </summary>
@@ -589,11 +627,12 @@
             Page model for deleting a transcript archive header.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.DeleteModel"/>.
             </summary>
             <param name="context">Application DB context for accessing transcripts.</param>
+            <param name="userManager">The user manager for accessing the current user.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transcripts.DeleteModel.Transcript">
             <summary>
@@ -615,11 +654,12 @@
             Page model for removing a single archived transaction from a transcript.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel"/>.
             </summary>
             <param name="context">Application DB context for accessing transcripts and archived transactions.</param>
+            <param name="userManager">The user manager for accessing the current user.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transcripts.DeleteTransactionModel.Transcript">
             <summary>
@@ -646,11 +686,12 @@
             Page model for viewing a transcript and its archived transactions.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DetailsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.DetailsModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.DetailsModel"/>.
             </summary>
             <param name="context">Application DB context for loading transcripts and transactions.</param>
+            <param name="userManager">The user manager for accessing the current user.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transcripts.DetailsModel.Transcript">
             <summary>
@@ -667,11 +708,12 @@
             Page model for editing a transcript header (name/description) and loading contained transactions.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.EditModel"/>.
             </summary>
             <param name="context">Application DB context for editing transcripts.</param>
+            <param name="userManager">The user manager for accessing the current user.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transcripts.EditModel.Transcript">
             <summary>
@@ -693,11 +735,12 @@
             Page model for editing a single transcript transaction (an archived transaction row).
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of <see cref="T:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel"/>.
             </summary>
             <param name="context">Application DB context for accessing transcript transactions.</param>
+            <param name="userManager">The user manager for accessing the current user.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transcripts.EditTransactionModel.TranscriptTransaction">
             <summary>
@@ -725,11 +768,12 @@
             Groups existing transactions into monthly transcript rows.
             </summary>
         </member>
-        <member name="M:PersonalFinanceTracker.Pages.Transcripts.IndexModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext)">
+        <member name="M:PersonalFinanceTracker.Pages.Transcripts.IndexModel.#ctor(PersonalFinanceTracker.Data.ApplicationDbContext,Microsoft.AspNetCore.Identity.UserManager{PersonalFinanceTracker.Models.AppUser})">
             <summary>
             Initializes a new instance of the <see cref="T:PersonalFinanceTracker.Pages.Transcripts.IndexModel"/> class.
             </summary>
             <param name="context">The application database context.</param>
+            <param name="userManager">The user manager for accessing the current user.</param>
         </member>
         <member name="P:PersonalFinanceTracker.Pages.Transcripts.IndexModel.Transcripts">
             <summary>

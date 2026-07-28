@@ -8,10 +8,10 @@ using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Pages.Transactions
 {
-	[Authorize]
 	/// <summary>
 	/// Page model for viewing details of a single transaction.
 	/// </summary>
+	[Authorize]
 	public class DetailsTransactionsModel : PageModel
 	{
 		private readonly ApplicationDbContext _context;
@@ -21,6 +21,8 @@ namespace PersonalFinanceTracker.Pages.Transactions
 		/// <summary>
 		/// Initializes a new instance of <see cref="DetailsTransactionsModel"/>.
 		/// </summary>
+		/// <param name="context">The application database context.</param>
+		/// <param name="userManager">The user manager for handling user information.</param>
     public DetailsTransactionsModel(ApplicationDbContext context, UserManager<AppUser> userManager)
 		{
 			_context = context;
